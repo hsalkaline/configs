@@ -15,6 +15,7 @@
 ;; general
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+; kill without confirm
 (defun kill-this-buffer-volatile ()
   "Kill current buffer, even if it has been modified."
   (interactive)
@@ -22,6 +23,7 @@
   (kill-this-buffer))
 (global-set-key (kbd "C-x k") 'kill-this-buffer-volatile)
 
+; commenting \M-;
 (defun comment-eclipse ()
   (interactive)
   (let ((start (line-beginning-position))
@@ -38,6 +40,13 @@
     (comment-or-uncomment-region start end)))
 (global-set-key "\M-;" 'comment-eclipse)
 
+;backups in temp
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+                `((".*" ,temporary-file-directory t)))
+
+; replace in region			       
 (delete-selection-mode t)
 
 ;; expand-region
@@ -111,3 +120,15 @@
 
 ;; magit
 (global-set-key (kbd "\C-x\C-g") 'magit-status)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(js2-bounce-indent-p t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
