@@ -1,0 +1,15 @@
+[user]
+	email = hsalkaline@gmail.com
+[core]
+	editor = /usr/bin/vim
+	excludesfile = ~/.gitignore
+[help]
+	autocorrect = 1
+[push]
+	default = simple
+[branch]
+	autosetuprebase = always
+[rerere]
+	enabled = true
+[color]
+	ui = auto
