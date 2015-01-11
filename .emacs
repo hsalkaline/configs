@@ -49,6 +49,9 @@
 ; replace in region			       
 (delete-selection-mode t)
 
+; evil-mode
+(evil-mode t)
+
 ;; expand-region
 (global-set-key (kbd "\C-c=") 'er/expand-region)
 
