@@ -50,7 +50,10 @@
 (delete-selection-mode t)
 
 ; evil-mode
+(require 'evil)
 (evil-mode t)
+(key-chord-mode t)
+(key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
 
 ;; expand-region
 (global-set-key (kbd "\C-c=") 'er/expand-region)
@@ -131,7 +134,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(js2-bounce-indent-p t))
+ '(js2-bounce-indent-p nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
