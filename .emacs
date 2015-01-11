@@ -86,6 +86,9 @@
               (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
               (define-key js2-mode-map "@" 'js-doc-insert-tag)))
 
+;; less-css
+(require 'less-css-mode)
+(define-key less-css-mode-map (kbd "\C-c\C-c") nil)
 
 ;; ido
 (require 'uniquify)
