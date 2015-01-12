@@ -58,6 +58,9 @@
 ;; expand-region
 (global-set-key (kbd "\C-c=") 'er/expand-region)
 
+;; smartparens
+(require 'smartparens-config)
+
 ;; autocomplete
 (require 'auto-complete-config)
 (ac-config-default)
