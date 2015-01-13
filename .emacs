@@ -23,20 +23,41 @@
   (kill-this-buffer))
 (global-set-key (kbd "C-x k") 'kill-this-buffer-volatile)
 
+(defun cleanup-buffer-safe ()
+    "Perform a bunch of safe operations on the whitespace content of a buffer.
+Does not indent buffer, because it is used for a before-save-hook, and that
+might be bad."
+    (interactive)
+    (untabify (point-min) (point-max))
+    (delete-trailing-whitespace)
+    (set-buffer-file-coding-system 'utf-8))
+
+;; trail whitespace and convert tabs to spaces on savekj
+(add-hook 'before-save-hook 'cleanup-buffer-safe)
+
+(defun cleanup-buffer ()
+    "Perform a bunch of operations on the whitespace content of a buffer.
+Including indent-buffer, which should not be called automatically on save."
+    (interactive)
+    (cleanup-buffer-safe)
+    (indent-region (point-min) (point-max)))
+
+(global-set-key (kbd "C-c n") 'cleanup-buffer)
+
 ; commenting \M-;
 (defun comment-eclipse ()
   (interactive)
   (let ((start (line-beginning-position))
-	(end (line-end-position)))
+        (end (line-end-position)))
     (when (or (not transient-mark-mode) (region-active-p))
       (setq start (save-excursion
-		    (goto-char (region-beginning))
-		    (beginning-of-line)
-		    (point))
-	    end (save-excursion
-		  (goto-char (region-end))
-		  (end-of-line)
-		  (point))))
+                    (goto-char (region-beginning))
+                    (beginning-of-line)
+                    (point))
+            end (save-excursion
+                  (goto-char (region-end))
+                  (end-of-line)
+                  (point))))
     (comment-or-uncomment-region start end)))
 (global-set-key "\M-;" 'comment-eclipse)
 
@@ -46,7 +67,7 @@
 (setq auto-save-file-name-transforms
                 `((".*" ,temporary-file-directory t)))
 
-; replace in region			       
+; replace in region
 (delete-selection-mode t)
 
 ; evil-mode
@@ -60,6 +81,7 @@
 
 ;; smartparens
 (require 'smartparens-config)
+(smartparens-global-mode t)
 
 ;; autocomplete
 (require 'auto-complete-config)
@@ -76,10 +98,10 @@
 ;; js-mode, coffee-mode
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-hook 'js2-mode-hook
-	  #'(lambda ()
-	      (tern-mode t)
-	      (define-key tern-mode-keymap (kbd "\C-c\C-c") nil)
-	      (define-key tern-mode-keymap (kbd "\C-c\C-d") nil)))
+          #'(lambda ()
+              (tern-mode t)
+              (define-key tern-mode-keymap (kbd "\C-c\C-c") nil)
+              (define-key tern-mode-keymap (kbd "\C-c\C-d") nil)))
 (eval-after-load 'tern
   '(progn
      (require 'tern-auto-complete)
@@ -121,6 +143,7 @@
       helm-M-x-fuzzy-match t
       helm-buffers-fuzzy-matching t
       helm-recentf-fuzzy-match t)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
 ;; projectile \C-c p p
 (setq projectile-completion-system 'helm)
