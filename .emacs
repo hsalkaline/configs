@@ -15,6 +15,11 @@
 ;; general
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+; line numbers
+(require 'linum-relative)
+(linum-on)
+(global-linum-mode t)
+
 ; kill without confirm
 (defun kill-this-buffer-volatile ()
   "Kill current buffer, even if it has been modified."
@@ -161,6 +166,7 @@ Including indent-buffer, which should not be called automatically on save."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(js2-bounce-indent-p nil)
+ '(linum-relative-format "%3s ")
  '(undo-tree-auto-save-history t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
