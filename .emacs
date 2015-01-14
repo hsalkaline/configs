@@ -20,6 +20,10 @@
 (linum-on)
 (global-linum-mode t)
 
+; auto-save
+(setq auto-save-visited-file-name t)
+(setq auto-save-timeout 1)
+
 ; kill without confirm
 (defun kill-this-buffer-volatile ()
   "Kill current buffer, even if it has been modified."
@@ -94,6 +98,8 @@ Including indent-buffer, which should not be called automatically on save."
 
 ;; undo-tree \C-x u
 (global-undo-tree-mode)
+(setq undo-tree-history-directory-alist
+      `((".*" . ,temporary-file-directory)))
 
 ;; org-mode
 (global-set-key "\C-cl" 'org-store-link)
