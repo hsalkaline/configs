@@ -1,6 +1,6 @@
 ; my-packages.el
 (defvar required-packages
-  '(color-theme company-tern company dash-functional ecb flx-ido flx gnuplot helm-projectile helm async js2-mode org projectile pkg-info epl f dash s tern-auto-complete auto-complete popup tern undo-tree web-beautify multiple-cursors magit magit-filenotify less-css-mode helm-css-scss helm-ag coffee-mode js-doc js2-refactor expand-region evil key-chord smartparens linum-relative) "a list of packages to ensure are installed at launch.")
+  '(color-theme company-tern company dash-functional ecb flx-ido flx gnuplot helm-projectile helm async js2-mode org projectile pkg-info epl f dash s tern-auto-complete auto-complete popup tern undo-tree web-beautify multiple-cursors magit magit-filenotify less-css-mode helm-css-scss helm-ag coffee-mode js-doc js2-refactor expand-region evil key-chord smartparens linum-relative floobits ace-isearch popwin ov) "a list of packages to ensure are installed at launch.")
 
 ; my-packages.el
 (require 'cl)

@@ -8,12 +8,15 @@
 ;;install missing packages
 (load "~/.emacs.d/packages.el")
 
+(load "~/.emacs.d/github/better-jump/better-jump.el")
+
 ;; lang/coding
 (set-language-environment 'Russian)
 (prefer-coding-system 'utf-8)
 
 ;; general
 (defalias 'yes-or-no-p 'y-or-n-p)
+(setq dired-use-ls-dired nil)
 
 ; line numbers
 (require 'linum-relative)
@@ -22,7 +25,7 @@
 
 ; auto-save
 (setq auto-save-visited-file-name t)
-(setq auto-save-timeout 1)
+;; (setq auto-save-timeout 1)
 
 ; kill without confirm
 (defun kill-this-buffer-volatile ()
@@ -81,12 +84,51 @@ Including indent-buffer, which should not be called automatically on save."
 
 ; evil-mode
 (require 'evil)
-(evil-mode t)
 (key-chord-mode t)
-(key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
+(key-chord-define-global "dd" 'evil-delete-whole-line)
+(key-chord-define-global "yy" 'evil-yank-line)
+
+(require 'better-jump)
+(defun alkaline/visual-select-to-char ()
+  (interactive)
+  (call-interactively 'set-mark-command)
+  (call-interactively 'bjump-char-jump))
+
+(key-chord-define-global "ff" 'alkaline/visual-select-to-char)
+(global-set-key "\C-q" 'er/expand-region)
+(global-set-key "\M-q" 'mc/mark-next-like-this)
+
+
+(defun vi-open-line-above ()
+  "Insert a newline above the current line and put point at beginning."
+  (interactive)
+  (unless (bolp)
+    (beginning-of-line))
+  (newline)
+  (forward-line -1)
+  (indent-according-to-mode))
+
+(defun vi-open-line-below ()
+  "Insert a newline below the current line and put point at beginning."
+  (interactive)
+  (unless (eolp)
+    (end-of-line))
+    (newline-and-indent))
+
+(global-set-key "\C-o" 'vi-open-line-below)
+(global-set-key "\C-O" 'vi-open-line-above)
+
+;;(global-set-key "\C-l" 'evil-forward-char)
+;; (global-set-key "\C-h" 'evil-backward-char)
+;; (global-set-key "\C-k" 'evil-previous-line)
+;; (global-set-key "\C-j" 'evil-next-line)
+
+;; popwin
+(require 'popwin)
+(popwin-mode 1)
 
 ;; expand-region
-(global-set-key (kbd "\C-c=") 'er/expand-region)
+(global-set-key (kbd "M-=") 'er/expand-region)
 
 ;; smartparens
 (require 'smartparens-config)
@@ -95,6 +137,7 @@ Including indent-buffer, which should not be called automatically on save."
 ;; autocomplete
 (require 'auto-complete-config)
 (ac-config-default)
+(setq ac-dwim nil)
 
 ;; undo-tree \C-x u
 (global-undo-tree-mode)
@@ -143,7 +186,7 @@ Including indent-buffer, which should not be called automatically on save."
 ;; recently opened files \C-x\C-r
 (require 'recentf)
 (recentf-mode t)
-(global-set-key "\C-x\C-r" 'recentf-open-files)
+(global-set-key "\C-x\C-r" 'helm-recentf)
 
 ;; helm \M-x
 (require 'helm-config)
@@ -156,10 +199,13 @@ Including indent-buffer, which should not be called automatically on save."
       helm-recentf-fuzzy-match t)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
+;; ace
+(global-ace-isearch-mode t)
+
 ;; projectile \C-c p p
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
-(global-set-key (kbd "\C-c\C-c") 'helm-projectile)
+(global-set-key (kbd "\C-p") 'helm-projectile)
 (global-set-key (kbd "\C-cf") 'helm-projectile-ag)
 (projectile-global-mode t)
 (setq projectile-switch-project-action 'helm-projectile)
