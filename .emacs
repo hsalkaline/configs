@@ -21,22 +21,22 @@
 ; line numbers
 (setq linum-format "%s ")
 (global-linum-mode t)
+(column-number-mode t)
 
 ; auto-save
 (setq auto-save-visited-file-name t)
 
+;restore session
+(desktop-save-mode t)
+
 ; kill without confirm
 (defun alkaline/kill-this-buffer-volatile ()
-  "Kill current buffer, even if it has been modified."
   (interactive)
   (set-buffer-modified-p nil)
   (kill-this-buffer))
-(global-set-key (kbd "C-x k") 'alkaline/kill-this-buffer-volatile)
+(global-set-key (kbd "C-x C-k") 'alkaline/kill-this-buffer-volatile)
 
 (defun alkaline/cleanup-buffer-safe ()
-    "Perform a bunch of safe operations on the whitespace content of a buffer.
-Does not indent buffer, because it is used for a before-save-hook, and that
-might be bad."
     (interactive)
     (untabify (point-min) (point-max))
     (delete-trailing-whitespace)
@@ -71,9 +71,12 @@ might be bad."
 ; replace in region
 (delete-selection-mode t)
 
+;; key-chord
+(key-chord-mode t)
+(global-set-key (kbd "M-k") 'key-chord-mode)
+
 ; evil-mode
 (require 'evil)
-(key-chord-mode t)
 (key-chord-define-global "dd" 'evil-delete-whole-line)
 (key-chord-define-global "yy" 'evil-yank-line)
 
@@ -137,6 +140,13 @@ might be bad."
       `((".*" . ,temporary-file-directory)))
 (setq undo-tree-auto-save-history t)
 
+;;previous-buffer
+(defun alkaline/switch-to-previous-buffer ()
+    (interactive)
+      (switch-to-buffer (other-buffer (current-buffer) 1)))
+
+(global-set-key (kbd "<backtab>") 'alkaline/switch-to-previous-buffer)
+
 ;; org-mode
 ;; (global-set-key "\C-cl" 'org-store-link)
 ;; (global-set-key "\C-ca" 'org-agenda)
@@ -149,11 +159,13 @@ might be bad."
 (define-key tern-mode-keymap (kbd "\C-c\C-d") nil)
 
 (add-hook 'js2-mode-hook #'(lambda () (tern-mode t)))
+(require 'company)
+(add-to-list 'company-backends 'company-tern)
 
-(eval-after-load 'tern
-  '(progn
-     (require 'tern-auto-complete)
-     (tern-ac-setup)))
+;; (eval-after-load 'tern
+;;   '(progn
+;;      (require 'tern-auto-complete)
+;;      (tern-ac-setup)))
 
 (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
 (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
@@ -163,9 +175,7 @@ might be bad."
               (define-key js2-mode-map "@" 'js-doc-insert-tag)))
 
 ;; ido
-;; (require 'uniquify)
-;; (require 'ido)
-;; (ido-mode t)
+(ido-mode t)
 
 ;; \C-c\C-w copy regexp
 ;; \C-c\C-q quit
