@@ -19,23 +19,21 @@
 (setq dired-use-ls-dired nil)
 
 ; line numbers
-(require 'linum-relative)
-(linum-on)
+(setq linum-format "%s ")
 (global-linum-mode t)
 
 ; auto-save
 (setq auto-save-visited-file-name t)
-;; (setq auto-save-timeout 1)
 
 ; kill without confirm
-(defun kill-this-buffer-volatile ()
+(defun alkaline/kill-this-buffer-volatile ()
   "Kill current buffer, even if it has been modified."
   (interactive)
   (set-buffer-modified-p nil)
   (kill-this-buffer))
-(global-set-key (kbd "C-x k") 'kill-this-buffer-volatile)
+(global-set-key (kbd "C-x k") 'alkaline/kill-this-buffer-volatile)
 
-(defun cleanup-buffer-safe ()
+(defun alkaline/cleanup-buffer-safe ()
     "Perform a bunch of safe operations on the whitespace content of a buffer.
 Does not indent buffer, because it is used for a before-save-hook, and that
 might be bad."
@@ -44,17 +42,8 @@ might be bad."
     (delete-trailing-whitespace)
     (set-buffer-file-coding-system 'utf-8))
 
-;; trail whitespace and convert tabs to spaces on savekj
-(add-hook 'before-save-hook 'cleanup-buffer-safe)
-
-(defun cleanup-buffer ()
-    "Perform a bunch of operations on the whitespace content of a buffer.
-Including indent-buffer, which should not be called automatically on save."
-    (interactive)
-    (cleanup-buffer-safe)
-    (indent-region (point-min) (point-max)))
-
-(global-set-key (kbd "C-c n") 'cleanup-buffer)
+;; trail whitespace and convert tabs to spaces on save
+(add-hook 'before-save-hook 'alkaline/cleanup-buffer-safe)
 
 ; commenting \M-;
 (defun comment-eclipse ()
@@ -77,7 +66,7 @@ Including indent-buffer, which should not be called automatically on save."
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
-                `((".*" ,temporary-file-directory t)))
+      `((".*" ,temporary-file-directory t)))
 
 ; replace in region
 (delete-selection-mode t)
@@ -88,18 +77,7 @@ Including indent-buffer, which should not be called automatically on save."
 (key-chord-define-global "dd" 'evil-delete-whole-line)
 (key-chord-define-global "yy" 'evil-yank-line)
 
-(require 'better-jump)
-(defun alkaline/visual-select-to-char ()
-  (interactive)
-  (call-interactively 'set-mark-command)
-  (call-interactively 'bjump-char-jump))
-
-(key-chord-define-global "ff" 'alkaline/visual-select-to-char)
-(global-set-key "\C-q" 'er/expand-region)
-(global-set-key "\M-q" 'mc/mark-next-like-this)
-
-
-(defun vi-open-line-above ()
+(defun alkaline/vi-open-line-above ()
   "Insert a newline above the current line and put point at beginning."
   (interactive)
   (unless (bolp)
@@ -108,54 +86,70 @@ Including indent-buffer, which should not be called automatically on save."
   (forward-line -1)
   (indent-according-to-mode))
 
-(defun vi-open-line-below ()
+(defun alkaline/vi-open-line-below ()
   "Insert a newline below the current line and put point at beginning."
   (interactive)
   (unless (eolp)
     (end-of-line))
     (newline-and-indent))
 
-(global-set-key "\C-o" 'vi-open-line-below)
-(global-set-key "\C-O" 'vi-open-line-above)
-
-;;(global-set-key "\C-l" 'evil-forward-char)
+;; (global-set-key "\C-l" 'evil-forward-char)
 ;; (global-set-key "\C-h" 'evil-backward-char)
 ;; (global-set-key "\C-k" 'evil-previous-line)
 ;; (global-set-key "\C-j" 'evil-next-line)
 
+(global-set-key (kbd "C-o") 'alkaline/vi-open-line-below)
+(global-set-key (kbd "C-S-o") 'alkaline/vi-open-line-above)
+
+;;jumping
+(require 'better-jump)
+(setq bjump-picker-single-letter-list "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM")
+(defun alkaline/visual-select-to-char ()
+  (interactive)
+  (call-interactively 'set-mark-command)
+  (call-interactively 'bjump-char-jump)
+  (forward-char))
+
+(key-chord-define-global "ff" 'alkaline/visual-select-to-char)
+
+;;selecting
+(global-set-key "\C-q" 'er/expand-region)
+(global-set-key "\M-q" 'mc/mark-next-like-this)
+(global-set-key "\M-d" 'mc/edit-lines)
+
 ;; popwin
 (require 'popwin)
 (popwin-mode 1)
-
-;; expand-region
-(global-set-key (kbd "M-=") 'er/expand-region)
 
 ;; smartparens
 (require 'smartparens-config)
 (smartparens-global-mode t)
 
 ;; autocomplete
-(require 'auto-complete-config)
-(ac-config-default)
-(setq ac-dwim nil)
+(add-hook 'after-init-hook 'global-company-mode)
+;; (require 'auto-complete-config)
+;; (ac-config-default)
+;; (setq ac-dwim nil)
 
 ;; undo-tree \C-x u
 (global-undo-tree-mode)
 (setq undo-tree-history-directory-alist
       `((".*" . ,temporary-file-directory)))
+(setq undo-tree-auto-save-history t)
 
 ;; org-mode
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-      (global-set-key "\C-cb" 'org-iswitchb)
+;; (global-set-key "\C-cl" 'org-store-link)
+;; (global-set-key "\C-ca" 'org-agenda)
+;; (global-set-key "\C-cb" 'org-iswitchb)
 
 ;; js-mode, coffee-mode
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-hook 'js2-mode-hook
-          #'(lambda ()
-              (tern-mode t)
-              (define-key tern-mode-keymap (kbd "\C-c\C-c") nil)
-              (define-key tern-mode-keymap (kbd "\C-c\C-d") nil)))
+(require 'tern)
+(define-key tern-mode-keymap (kbd "\C-c\C-c") nil)
+(define-key tern-mode-keymap (kbd "\C-c\C-d") nil)
+
+(add-hook 'js2-mode-hook #'(lambda () (tern-mode t)))
+
 (eval-after-load 'tern
   '(progn
      (require 'tern-auto-complete)
@@ -168,14 +162,10 @@ Including indent-buffer, which should not be called automatically on save."
               (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
               (define-key js2-mode-map "@" 'js-doc-insert-tag)))
 
-;; less-css
-(require 'less-css-mode)
-(define-key less-css-mode-map (kbd "\C-c\C-c") nil)
-
 ;; ido
-(require 'uniquify)
-(require 'ido)
-(ido-mode t)
+;; (require 'uniquify)
+;; (require 'ido)
+;; (ido-mode t)
 
 ;; \C-c\C-w copy regexp
 ;; \C-c\C-q quit
@@ -211,18 +201,4 @@ Including indent-buffer, which should not be called automatically on save."
 (setq projectile-switch-project-action 'helm-projectile)
 
 ;; magit
-(global-set-key (kbd "\C-x\C-g") 'magit-status)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(js2-bounce-indent-p nil)
- '(linum-relative-format "%3s ")
- '(undo-tree-auto-save-history t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(global-set-key (kbd "\C-c\C-g") 'magit-status)
