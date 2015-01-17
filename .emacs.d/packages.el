@@ -43,7 +43,8 @@
     ace-isearch
     popwin
     ov
-    flycheck) "a list of packages to ensure are installed at launch.")
+    flycheck
+    wgrep-ag))
 
 ; my-packages.el
 (require 'cl)

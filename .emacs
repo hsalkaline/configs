@@ -40,6 +40,7 @@
   (set-buffer-modified-p nil)
   (kill-this-buffer))
 (global-set-key (kbd "C-x C-k") 'alkaline/kill-this-buffer-volatile)
+(global-set-key (kbd "C-x k") 'alkaline/kill-this-buffer-volatile)
 
 (defun alkaline/cleanup-buffer-safe ()
     (interactive)
@@ -75,6 +76,17 @@
 
 ; replace in region
 (delete-selection-mode t)
+
+; smart-beginning-of-line
+(defun alkaline/smart-line-beginning ()
+    "Move point to the beginning of text on the current line; if that is already
+the current position of point, then move it to the beginning of the line."
+    (interactive)
+    (let ((pt (point)))
+      (beginning-of-line-text)
+      (when (eq pt (point))
+        (beginning-of-line))))
+(global-set-key "\C-a" 'alkaline/smart-line-beginning)
 
 ;; key-chord
 (key-chord-mode t)
@@ -122,7 +134,8 @@
 
 ;;selecting
 (global-set-key "\C-q" 'er/expand-region)
-(global-set-key "\M-q" 'mc/mark-next-like-this)
+(global-set-key "\M-q" 'mc/mark-all-dwim)
+(global-set-key "\M-e" 'mc/mark-next-like-this)
 (global-set-key "\M-d" 'mc/edit-lines)
 
 ;; popwin
@@ -217,3 +230,12 @@
 
 ;; magit
 (global-set-key (kbd "\C-c\C-g") 'magit-status)
+
+;; wgrep
+(require 'wgrep)
+(require 'wgrep-ag)
+(autoload 'wgrep-ag-setup "wgrep-ag")
+(add-hook 'ag-mode-hook 'wgrep-ag-setup)
+(global-set-key "\C-cf" 'ag-project)
+(put 'narrow-to-region 'disabled nil)
+(define-key dired-mode-map (kbd "C-c C-p") 'wdired-change-to-wdired-mode)
