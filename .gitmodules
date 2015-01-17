@@ -2,3 +2,6 @@
 	path = .emacs.d/github/better-jump
 	url = git@github.com:Fuco1/better-jump.git
 	branch = master
+[submodule "dotbot"]
+	path = dotbot
+	url = https://github.com/anishathalye/dotbot
