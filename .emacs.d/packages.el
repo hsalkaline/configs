@@ -42,7 +42,8 @@
     floobits
     ace-isearch
     popwin
-    ov) "a list of packages to ensure are installed at launch.")
+    ov
+    flycheck) "a list of packages to ensure are installed at launch.")
 
 ; my-packages.el
 (require 'cl)

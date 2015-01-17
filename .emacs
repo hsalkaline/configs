@@ -1,3 +1,8 @@
+;; env
+(if (not (getenv "TERM_PROGRAM"))
+    (setenv "PATH"
+            (shell-command-to-string "source $HOME/.profile && printf $PATH")))
+
 ;; melpa packages
 (when (>= emacs-major-version 24)
   (require 'package)
