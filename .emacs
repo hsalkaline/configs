@@ -13,7 +13,7 @@
 (load "~/.emacs.d/packages.el")
 
 ;;colors
-(load-theme 'tangotango)
+(load-theme 'tangotango t)
 
 ;; lang/coding
 (set-language-environment 'Russian)
@@ -216,7 +216,7 @@ the current position of point, then move it to the beginning of the line."
 ;; helm \M-x
 (require 'helm-config)
 (global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "\C-w") 'helm-buffers-list)
+(global-set-key (kbd "M-a") 'helm-buffers-list)
 (global-set-key (kbd "\C-x\C-b") 'helm-buffers-list)
 (global-set-key (kbd "\C-xb") 'helm-mini)
 (setq helm-locate-fuzzy-match t
@@ -250,17 +250,6 @@ the current position of point, then move it to the beginning of the line."
 (put 'narrow-to-region 'disabled nil)
 
 (global-set-key (kbd "<f5>") 'project-explorer-open)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("49e5a7955b853f70d1fe751b2f896921398b273aa62f47bda961a45f80219581" "1297a022df4228b81bc0436230f211bad168a117282c20ddcba2db8c6a200743" default))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
+;;tramp
+(setq tramp-default-method "ssh")
