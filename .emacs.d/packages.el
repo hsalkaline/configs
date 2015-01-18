@@ -44,7 +44,9 @@
     popwin
     ov
     flycheck
-    wgrep-ag))
+    wgrep-ag
+    project-explorer
+    tangotango-theme))
 
 ; my-packages.el
 (require 'cl)

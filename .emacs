@@ -7,13 +7,13 @@
 (when (>= emacs-major-version 24)
   (require 'package)
   (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
 
 ;;install missing packages
 (load "~/.emacs.d/packages.el")
 
-(load "~/.emacs.d/github/better-jump/better-jump.el")
+;;colors
+(load-theme 'tangotango)
 
 ;; lang/coding
 (set-language-environment 'Russian)
@@ -23,6 +23,8 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq dired-use-ls-dired nil)
 
+;; no menu
+(menu-bar-mode -1)
 ; line numbers
 (setq linum-format "%s ")
 (global-linum-mode t)
@@ -50,6 +52,9 @@
 
 ;; trail whitespace and convert tabs to spaces on save
 (add-hook 'before-save-hook 'alkaline/cleanup-buffer-safe)
+
+;; eshell
+(global-set-key (kbd "<f10>") 'eshell)
 
 ; commenting \M-;
 (defun comment-eclipse ()
@@ -94,8 +99,10 @@ the current position of point, then move it to the beginning of the line."
 
 ; evil-mode
 (require 'evil)
-(key-chord-define-global "dd" 'evil-delete-whole-line)
+;; (key-chord-define-global "dd" 'evil-delete-whole-line)
+(global-set-key "\C-d" 'evil-delete-whole-line)
 (key-chord-define-global "yy" 'evil-yank-line)
+(global-set-key "\C-v" 'set-mark-command)
 
 (defun alkaline/vi-open-line-above ()
   "Insert a newline above the current line and put point at beginning."
@@ -122,6 +129,7 @@ the current position of point, then move it to the beginning of the line."
 (global-set-key (kbd "C-S-o") 'alkaline/vi-open-line-above)
 
 ;;jumping
+(load "~/.emacs.d/github/better-jump/better-jump.el")
 (require 'better-jump)
 (setq bjump-picker-single-letter-list "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM")
 (defun alkaline/visual-select-to-char ()
@@ -129,7 +137,6 @@ the current position of point, then move it to the beginning of the line."
   (call-interactively 'set-mark-command)
   (call-interactively 'bjump-char-jump)
   (forward-char))
-
 (key-chord-define-global "ff" 'alkaline/visual-select-to-char)
 
 ;;selecting
@@ -209,6 +216,7 @@ the current position of point, then move it to the beginning of the line."
 ;; helm \M-x
 (require 'helm-config)
 (global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "\C-w") 'helm-buffers-list)
 (global-set-key (kbd "\C-x\C-b") 'helm-buffers-list)
 (global-set-key (kbd "\C-xb") 'helm-mini)
 (setq helm-locate-fuzzy-match t
@@ -237,5 +245,22 @@ the current position of point, then move it to the beginning of the line."
 (autoload 'wgrep-ag-setup "wgrep-ag")
 (add-hook 'ag-mode-hook 'wgrep-ag-setup)
 (global-set-key "\C-cf" 'ag-project)
-(put 'narrow-to-region 'disabled nil)
 (define-key dired-mode-map (kbd "C-c C-p") 'wdired-change-to-wdired-mode)
+
+(put 'narrow-to-region 'disabled nil)
+
+(global-set-key (kbd "<f5>") 'project-explorer-open)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("49e5a7955b853f70d1fe751b2f896921398b273aa62f47bda961a45f80219581" "1297a022df4228b81bc0436230f211bad168a117282c20ddcba2db8c6a200743" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
