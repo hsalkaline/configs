@@ -54,7 +54,7 @@
 (add-hook 'before-save-hook 'alkaline/cleanup-buffer-safe)
 
 ;; eshell
-(global-set-key (kbd "<f10>") 'eshell)
+(global-set-key (kbd "<f8>") 'eshell)
 
 ; commenting \M-;
 (defun comment-eclipse ()
@@ -103,6 +103,7 @@ the current position of point, then move it to the beginning of the line."
 (global-set-key "\C-d" 'evil-delete-whole-line)
 (key-chord-define-global "yy" 'evil-yank-line)
 (global-set-key "\C-v" 'set-mark-command)
+(global-set-key (kbd "C-S-v") 'set-mark-command)
 
 (defun alkaline/vi-open-line-above ()
   "Insert a newline above the current line and put point at beginning."
@@ -137,7 +138,8 @@ the current position of point, then move it to the beginning of the line."
   (call-interactively 'set-mark-command)
   (call-interactively 'bjump-char-jump)
   (forward-char))
-(key-chord-define-global "ff" 'alkaline/visual-select-to-char)
+;; (key-chord-define-global "ff" 'alkaline/visual-select-to-char)
+(global-set-key "\C-f" 'alkaline/visual-select-to-char)
 
 ;;selecting
 (global-set-key "\C-q" 'er/expand-region)
@@ -253,3 +255,31 @@ the current position of point, then move it to the beginning of the line."
 
 ;;tramp
 (setq tramp-default-method "ssh")
+
+;;flyspell
+(require 'flyspell)
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+
+;; insert-file-path
+(defun alkaline/insert-file-name (filename &optional args)
+  "Insert name of file FILENAME into buffer after point.
+
+  Prefixed with \\[universal-argument], expand the file name to
+  its fully canocalized path.  See `expand-file-name'.
+
+  Prefixed with \\[negative-argument], use relative path to file
+  name from current directory, `default-directory'.  See
+  `file-relative-name'.
+
+  The default with no prefix is to insert the file name exactly as
+  it appears in the minibuffer prompt."
+  (interactive `(,(ido-read-file-name "File Name: ")
+                 ,current-prefix-arg))
+  (cond ((eq '- args)
+         (insert (expand-file-name filename)))
+        ((not (null args))
+         (insert filename))
+        (t
+         (insert (file-relative-name filename)))))
+
+(global-set-key "\C-c\C-i" 'alkaline/insert-file-name)
