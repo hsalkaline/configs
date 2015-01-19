@@ -1,7 +1,7 @@
 ;; env
-(if (not (getenv "TERM_PROGRAM"))
-    (setenv "PATH"
-            (shell-command-to-string "source $HOME/.profile && printf $PATH")))
+(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+(add-to-list 'exec-path "/usr/local/bin")
+(add-to-list 'exec-path "/Users/alkaline/.nvm/v0.10.26/bin") ;;todo
 
 ;; melpa packages
 (when (>= emacs-major-version 24)
@@ -163,8 +163,7 @@ the current position of point, then move it to the beginning of the line."
 
 ;; undo-tree \C-x u
 (global-undo-tree-mode)
-(setq undo-tree-history-directory-alist
-      `((".*" . ,temporary-file-directory)))
+(setq undo-tree-history-directory-alist `((".*" . "~/.emacs.d/undo")))
 (setq undo-tree-auto-save-history t)
 
 ;;previous-buffer
@@ -188,11 +187,6 @@ the current position of point, then move it to the beginning of the line."
 (add-hook 'js2-mode-hook #'(lambda () (tern-mode t)))
 (require 'company)
 (add-to-list 'company-backends 'company-tern)
-
-;; (eval-after-load 'tern
-;;   '(progn
-;;      (require 'tern-auto-complete)
-;;      (tern-ac-setup)))
 
 (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
 (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
