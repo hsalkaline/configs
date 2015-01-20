@@ -224,6 +224,7 @@ the current position of point, then move it to the beginning of the line."
 ;; ace
 (global-ace-isearch-mode t)
 (setq ace-isearch-input-length 2)
+(setq ace-isearch-submode 'ace-jump-char-mode)
 
 ;; projectile \C-c p p
 (setq projectile-completion-system 'helm)
