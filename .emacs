@@ -223,6 +223,7 @@ the current position of point, then move it to the beginning of the line."
 
 ;; ace
 (global-ace-isearch-mode t)
+(setq ace-isearch-input-length 2)
 
 ;; projectile \C-c p p
 (setq projectile-completion-system 'helm)
@@ -240,6 +241,7 @@ the current position of point, then move it to the beginning of the line."
 (require 'wgrep-ag)
 (autoload 'wgrep-ag-setup "wgrep-ag")
 (add-hook 'ag-mode-hook 'wgrep-ag-setup)
+(setq wgrep-auto-save-buffer t)
 (global-set-key "\C-cf" 'ag-project)
 (define-key dired-mode-map (kbd "C-c C-p") 'wdired-change-to-wdired-mode)
 
@@ -277,3 +279,11 @@ the current position of point, then move it to the beginning of the line."
          (insert (file-relative-name filename)))))
 
 (global-set-key "\C-c\C-i" 'alkaline/insert-file-name)
+
+;; screen
+(defun terminal-init-screen ()
+  "Terminal initialization function for screen-256color."
+  (load "term/xterm")
+  (xterm-register-default-colors)
+        (tty-set-up-initial-frame-faces))
+(terminal-init-screen)
