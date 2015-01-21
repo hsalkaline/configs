@@ -25,6 +25,8 @@
 
 ;; no menu
 (menu-bar-mode -1)
+(tool-bar-mode -1)
+
 ; line numbers
 (setq linum-format "%s ")
 (global-linum-mode t)
@@ -235,7 +237,7 @@ the current position of point, then move it to the beginning of the line."
 (setq projectile-switch-project-action 'helm-projectile)
 
 ;; magit
-(global-set-key (kbd "\C-c\C-g") 'magit-status)
+(global-set-key (kbd "\C-c\C-m") 'magit-status)
 
 ;; wgrep
 (require 'wgrep)
