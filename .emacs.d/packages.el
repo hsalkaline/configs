@@ -1,52 +1,49 @@
 ; my-packages.el
 (defvar required-packages
-  '(color-theme
-    company-tern
-    company
-    dash-functional
-    ecb
-    flx-ido
-    flx
-    gnuplot
-    helm-projectile
-    helm
-    async
-    js2-mode
-    org
-    projectile
-    pkg-info
-    epl
-    f
-    dash
-    s
-    tern-auto-complete
+  '(ace-isearch
     auto-complete
-    popup
-    tern
-    undo-tree
-    web-beautify
-    multiple-cursors
+    coffee-mode
+    color-theme
+    company
+    company-tern
+    ecb
+    evil
+    exec-path-from-shell
+    expand-region
+    floobits
+    flx
+    flx-ido
+    flycheck
+    gnuplot
+    helm
+    helm-ag
+    helm-css-scss
+    helm-projectile
+    js-doc
+    js2-mode
+    js2-refactor
+    key-chord
+    less-css-mode
+    linum-relative
     magit
     magit-filenotify
-    less-css-mode
-    helm-css-scss
-    helm-ag
-    coffee-mode
-    js-doc
-    js2-refactor
-    expand-region
-    evil
-    key-chord
-    smartparens
-    linum-relative
-    floobits
-    ace-isearch
-    popwin
+    multiple-cursors
+    org
     ov
-    flycheck
-    wgrep-ag
+    popup
+    popwin
+    powerline
     project-explorer
-    tangotango-theme))
+    projectile
+    rainbow-delimiters
+    smartparens
+    smooth-scrolling
+    tangotango-theme
+    tern
+    tern-auto-complete
+    undo-tree
+    web-beautify
+    wgrep-ag))
 
 ; my-packages.el
 (require 'cl)
@@ -56,9 +53,6 @@
   (loop for p in required-packages
         when (not (package-installed-p p)) do (return nil)
         finally (return t)))
-
-(unless (packages-installed-p)
-  (message "%s" "There are not installed packages!"))
 
 (defun alkaline/install-missing-packages ()
   "Checking for missing packages and installs them"

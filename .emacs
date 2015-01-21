@@ -1,12 +1,9 @@
-;; env
-(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
-(add-to-list 'exec-path "/usr/local/bin")
-(add-to-list 'exec-path "/Users/alkaline/.nvm/v0.10.26/bin") ;;todo
-
 ;; melpa packages
 (when (>= emacs-major-version 24)
   (require 'package)
   (package-initialize)
+  (when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
 
 ;;install missing packages
@@ -30,7 +27,7 @@
 ; line numbers
 (setq linum-format "%s ")
 (global-linum-mode t)
-(column-number-mode t)
+;; (column-number-mode t)
 
 ; auto-save
 (setq auto-save-visited-file-name t)
@@ -123,10 +120,10 @@ the current position of point, then move it to the beginning of the line."
     (end-of-line))
     (newline-and-indent))
 
-;; (global-set-key "\C-l" 'evil-forward-char)
-;; (global-set-key "\C-h" 'evil-backward-char)
-;; (global-set-key "\C-k" 'evil-previous-line)
-;; (global-set-key "\C-j" 'evil-next-line)
+(global-set-key "\C-l" 'evil-forward-char)
+(global-set-key "\C-h" 'evil-backward-char)
+(global-set-key "\C-k" 'evil-previous-line)
+(global-set-key "\C-j" 'evil-next-line)
 
 (global-set-key (kbd "C-o") 'alkaline/vi-open-line-below)
 (global-set-key (kbd "C-S-o") 'alkaline/vi-open-line-above)
@@ -259,7 +256,7 @@ the current position of point, then move it to the beginning of the line."
 (require 'flyspell)
 (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
-;; insert-file-path
+;; insert-file-name
 (defun alkaline/insert-file-name (filename &optional args)
   "Insert name of file FILENAME into buffer after point.
 
@@ -284,9 +281,20 @@ the current position of point, then move it to the beginning of the line."
 (global-set-key "\C-c\C-i" 'alkaline/insert-file-name)
 
 ;; screen
-(defun terminal-init-screen ()
-  "Terminal initialization function for screen-256color."
-  (load "term/xterm")
-  (xterm-register-default-colors)
-        (tty-set-up-initial-frame-faces))
-(terminal-init-screen)
+(when (not 'display-graphic-p)
+  (defun terminal-init-screen ()
+    "Terminal initialization function for screen-256color."
+    (load "term/xterm")
+    (xterm-register-default-colors)
+    (tty-set-up-initial-frame-faces))
+  (terminal-init-screen))
+
+;;smooth scroll
+(require 'smooth-scrolling)
+
+;;powerline
+;; (require 'powerline)
+(powerline-default-theme)
+
+;;rainbow delimeters
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)

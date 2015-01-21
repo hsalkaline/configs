@@ -8,3 +8,5 @@ case "$TERM" in
     'screen') TERM=screen-256color;;
     'Eterm') TERM=Eterm-256color;;
 esac
+
+export PATH=~/bin:$PATH
