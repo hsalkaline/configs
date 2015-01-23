@@ -6,8 +6,12 @@
     (exec-path-from-shell-initialize))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
 
+(let ((default-directory "~/.emacs.d/github/"))
+    (normal-top-level-add-subdirs-to-load-path))
+
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/alkaline/"))
 ;;install missing packages
-(load "~/.emacs.d/packages.el")
+(autoload 'alkaline/install-missing-packages "packages" "missing packages installer" t)
 
 ;;colors
 (load-theme 'tangotango t)
@@ -129,15 +133,14 @@ the current position of point, then move it to the beginning of the line."
 (global-set-key (kbd "C-S-o") 'alkaline/vi-open-line-above)
 
 ;;jumping
-(load "~/.emacs.d/github/better-jump/better-jump.el")
-(require 'better-jump)
+(require 'cl)
+(load "better-jump.el")
 (setq bjump-picker-single-letter-list "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM")
 (defun alkaline/visual-select-to-char ()
   (interactive)
   (call-interactively 'set-mark-command)
   (call-interactively 'bjump-char-jump)
   (forward-char))
-;; (key-chord-define-global "ff" 'alkaline/visual-select-to-char)
 (global-set-key "\C-f" 'alkaline/visual-select-to-char)
 
 ;;selecting
@@ -298,3 +301,6 @@ the current position of point, then move it to the beginning of the line."
 
 ;;rainbow delimeters
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
+;;ffap
+(global-set-key "\C-x\C-f" 'find-file-at-point)

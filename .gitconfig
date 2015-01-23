@@ -1,7 +1,7 @@
 [user]
 	email = hsalkaline@gmail.com
 [core]
-	editor = /usr/bin/vim
+	editor = "emacs --no-desktop"
 	excludesfile = ~/.gitignore
 [help]
 	autocorrect = 1

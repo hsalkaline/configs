@@ -1,7 +1,7 @@
 export ALTERNATE_EDITOR=""
-export EDITOR=emacs
+export EDITOR="emacs --no-desktop"
 
-alias a="emacs"
+alias e="emacs"
 
 case "$TERM" in
     'xterm') TERM=xterm-256color;;
