@@ -3,12 +3,15 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+(when (not (require 'use-package nil 'noerror))
+  (package-refresh-contents)
+  (package-install 'use-package)
+  (require 'use-package))
+
 (require 'use-package)
 
 ;;debug
-(toggle-debug-on-error)
+;; (toggle-debug-on-error)
 
 ;; PATH for graphics emacs
 (use-package exec-path-from-shell
