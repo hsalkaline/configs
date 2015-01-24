@@ -45,7 +45,7 @@
 (show-paren-mode t)
 
 ;restore session
-;; (desktop-save-mode t)
+(desktop-save-mode t)
 
 ;; trail whitespace and convert tabs to spaces on save
 (add-hook 'before-save-hook (lambda() (unless (string= (buffer-local-value 'major-mode (current-buffer)) "makefile-bsdmake-mode")
@@ -146,12 +146,13 @@
   :ensure t
   :init (popwin-mode t))
 
-(use-package smartparens
-  :ensure t
-  :init
-  (progn
-    (require 'smartparens-config)
-    (smartparens-global-mode t)))
+;; (use-package smartparens
+;;   :ensure t
+;;   :init
+;;   (progn
+;;     (require 'smartparens-config)
+;;     (smartparens-global-mode t)))
+(electric-pair-mode t)
 
 (use-package company
   :ensure t
@@ -176,18 +177,25 @@
   :init
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
   :config
-  (use-package tern
-    :ensure t
-    :init
-    (add-hook 'js2-mode-hook #'(lambda () (tern-mode t)))
-    :config
-    (progn
-      (define-key tern-mode-keymap (kbd "\C-c\C-c") nil)
-      (define-key tern-mode-keymap (kbd "\C-c\C-d") nil)
-      (use-package company-tern
-        :ensure t
-        :config
-        (add-to-list 'company-backends 'company-tern)))))
+  (progn
+    (use-package tern
+      :ensure t
+      :init
+      (add-hook 'js2-mode-hook #'(lambda () (tern-mode t)))
+      :config
+      (progn
+        (define-key tern-mode-keymap (kbd "\C-c\C-c") nil)
+        (define-key tern-mode-keymap (kbd "\C-c\C-d") nil)
+        (use-package company-tern
+          :ensure t
+          :config
+          (add-to-list 'company-backends 'company-tern))))
+    (use-package js2-refactor
+      :ensure t
+      :init
+      (require 'js2-refactor)
+      :config
+      (js2r-add-keybindings-with-prefix "C-c C-m"))))
 
 (use-package company
   :ensure t)
@@ -223,7 +231,7 @@
 
 (use-package magit
   :ensure t
-  :bind ("C-c C-m" . magit-status)
+  :bind ("C-c m" . magit-status)
   :config
   (use-package magit-filenotify
     :ensure t))
@@ -251,6 +259,11 @@
 (use-package alkaline
   :load-path "alkaline")
 
+(use-package multi-region
+  :load-path "multi-region"
+  :init
+  (define-key global-map (kbd "C-m") multi-region-map))
+
 ;;todo
 (use-package floobits)
 (use-package flx-ido
@@ -258,8 +271,6 @@
 (use-package flycheck
   :ensure t)
 (use-package gnuplot
-  :ensure t)
-(use-package js2-refactor
   :ensure t)
 (use-package less-css-mode
   :ensure t)
