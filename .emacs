@@ -42,11 +42,14 @@
 ; auto-save
 (setq auto-save-visited-file-name t)
 
+(show-paren-mode t)
+
 ;restore session
-(desktop-save-mode t)
+;; (desktop-save-mode t)
 
 ;; trail whitespace and convert tabs to spaces on save
-(add-hook 'before-save-hook 'alkaline/cleanup-buffer-safe)
+(add-hook 'before-save-hook (lambda() (unless (string= (buffer-local-value 'major-mode (current-buffer)) "makefile-bsdmake-mode")
+                                        (alkaline/cleanup-buffer-safe))))
 
 ;; eshell
 (global-set-key (kbd "<f8>") 'eshell)
@@ -91,14 +94,14 @@
   :config
   (load-theme 'tangotango t))
 
-;; key-chord
-(use-package key-chord
-  :config
-  (progn
-    (key-chord-mode t)
-    (key-chord-define-global "yy" 'evil-yank-line))
-  :bind
-  ("M-k". key-chord-mode))
+;; ;; key-chord
+;; (use-package key-chord
+;;   :config
+;;   (progn
+;;     (key-chord-mode t)
+;;     (key-chord-define-global "yy" 'evil-yank-line))
+;;   :bind
+;;   ("M-k". key-chord-mode))
 
 ;; evil-mode
 (use-package evil
@@ -109,7 +112,6 @@
         ("C-h" . evil-backward-char)
         ("C-k" . evil-previous-line)
         ("C-j" . evil-next-line)))
-
 
 ;;jumping
 (require 'cl)
@@ -211,24 +213,13 @@
     (use-package helm-ag
       :ensure t)
     (use-package helm-css-scss
-      :ensure t)
-    (use-package helm-projectile
       :ensure t))
   :bind (("M-x" . helm-M-x)
          ("M-a" . helm-buffers-list)
          ("C-x C-b" . helm-buffers-list)
          ("C-x b" . helm-mini)
          ("M-y" . helm-show-kill-ring)
-         ("\C-x\C-r" . helm-recentf)))
-
-
-;; projectile \C-c p p
-(setq projectile-completion-system 'helm)
-(helm-projectile-on)
-(global-set-key (kbd "\C-p") 'helm-projectile)
-(global-set-key (kbd "\C-cf") 'helm-projectile-ag)
-(projectile-global-mode t)
-(setq projectile-switch-project-action 'helm-projectile)
+         ("C-x C-r" . helm-recentf)))
 
 (use-package magit
   :ensure t
@@ -236,16 +227,6 @@
   :config
   (use-package magit-filenotify
     :ensure t))
-
-;; wgrep
-(require 'wgrep)
-(require 'wgrep-ag)
-(autoload 'wgrep-ag-setup "wgrep-ag")
-(add-hook 'ag-mode-hook 'wgrep-ag-setup)
-(setq wgrep-auto-save-buffer t)
-(global-set-key "\C-cf" 'ag-project)
-(define-key dired-mode-map (kbd "C-c C-p") 'wdired-change-to-wdired-mode)
-
 
 ;;flyspell
 (require 'flyspell)
@@ -271,8 +252,7 @@
   :load-path "alkaline")
 
 ;;todo
-(use-package floobits
-  :ensure t)
+(use-package floobits)
 (use-package flx-ido
   :ensure t)
 (use-package flycheck
@@ -288,4 +268,32 @@
 (use-package web-beautify
   :ensure t)
 (use-package wgrep-ag
-  :ensure t)
+  :ensure t
+  :init
+  (progn
+    (autoload 'wgrep-ag-setup "wgrep-ag")
+    (add-hook 'ag-mode-hook 'wgrep-ag-setup))
+  :config
+  (progn
+    (require 'dired)
+    (define-key dired-mode-map (kbd "C-c C-p") 'wdired-change-to-wdired-mode)
+    (setq wgrep-auto-save-buffer t)))
+
+(use-package ag
+  :ensure t
+  :bind ("C-c f" . ag-project))
+
+(use-package projectile
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook 'projectile-mode)
+  :config
+  (progn
+  (setq projectile-completion-system 'helm)
+  (setq projectile-switch-project-action 'helm-projectile)
+  (use-package helm-projectile
+    :ensure t
+    :config
+    (helm-projectile-on)))
+  :bind
+  ("C-p" . helm-projectile))

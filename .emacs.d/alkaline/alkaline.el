@@ -91,4 +91,13 @@ the current position of point, then move it to the beginning of the line."
 
 (global-set-key "\C-c\C-i" 'alkaline/insert-file-name)
 
+(defun alkaline/copy-line (arg)
+  "Copy lines (as many as prefix argument) in the kill ring"
+  (interactive "p")
+  (kill-ring-save (line-beginning-position)
+                  (line-beginning-position (+ 1 arg)))
+  (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
+
+(global-set-key "\M-k" 'alkaline/copy-line)
+
 (provide 'alkaline)
