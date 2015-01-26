@@ -66,6 +66,9 @@
 ;;ffap
 (global-set-key "\C-x\C-f" 'find-file-at-point)
 
+;;paste C-w
+(global-set-key "\C-w" 'yank)
+
 ;; ido
 (ido-mode t)
 
