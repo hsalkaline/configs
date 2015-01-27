@@ -114,7 +114,15 @@
         ("C-l" . evil-forward-char)
         ("C-h" . evil-backward-char)
         ("C-k" . evil-previous-line)
-        ("C-j" . evil-next-line)))
+        ("C-j" . evil-next-line)
+        ("M-j" . evil-join)))
+
+(use-package dot-mode
+  :ensure t
+  :init
+  (progn
+    (dot-mode-on)
+    (define-key dot-mode-map (kbd "C-'") 'dot-mode-execute)))
 
 ;;jumping
 (require 'cl)
@@ -149,12 +157,6 @@
   :ensure t
   :init (popwin-mode t))
 
-;; (use-package smartparens
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (require 'smartparens-config)
-;;     (smartparens-global-mode t)))
 (electric-pair-mode t)
 
 (use-package company
@@ -193,23 +195,18 @@
           :ensure t
           :config
           (add-to-list 'company-backends 'company-tern))))
+    (use-package js-doc
+      :ensure t
+      :init
+      (add-hook 'js2-mode-hook
+                #'(lambda ()
+                    (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc))))
     (use-package js2-refactor
       :ensure t
       :init
       (require 'js2-refactor)
       :config
       (js2r-add-keybindings-with-prefix "C-c C-m"))))
-
-(use-package company
-  :ensure t)
-
-(use-package js-doc
-  :ensure t
-  :init
-  (add-hook 'js2-mode-hook
-            #'(lambda ()
-                (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
-                (define-key js2-mode-map "@" 'js-doc-insert-tag))))
 
 (use-package helm
   :ensure t
@@ -230,18 +227,22 @@
          ("C-x C-b" . helm-buffers-list)
          ("C-x b" . helm-mini)
          ("M-y" . helm-show-kill-ring)
-         ("C-x C-r" . helm-recentf)))
+         ("C-x C-r" . helm-recentf)
+         ("M-m" . helm-mark-ring)))
 
 (use-package magit
   :ensure t
   :bind ("C-c m" . magit-status)
   :config
   (use-package magit-filenotify
-    :ensure t))
+    :ensure t
+    :init
+    (add-hook 'magit-status-mode-hook 'magit-filenotify-mode)))
 
-;;flyspell
-(require 'flyspell)
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(use-package flyspell
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook 'flyspell-prog-mode))
 
 (use-package smooth-scrolling
   :ensure t)
@@ -262,25 +263,30 @@
 (use-package alkaline
   :load-path "alkaline")
 
-(use-package multi-region
-  :load-path "multi-region"
-  :init
-  (define-key global-map (kbd "C-m") multi-region-map))
-
-;;todo
 (use-package floobits)
 (use-package flx-ido
   :ensure t)
 (use-package flycheck
-  :ensure t)
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook 'flycheck-mode))
+
 (use-package gnuplot
   :ensure t)
+
 (use-package less-css-mode
   :ensure t)
+
 (use-package smooth-scrolling
   :ensure t)
+
 (use-package web-beautify
   :ensure t)
+
+(use-package ag
+  :ensure t
+  :bind ("C-c f" . ag-project))
+
 (use-package wgrep-ag
   :ensure t
   :init
@@ -293,10 +299,6 @@
     (define-key dired-mode-map (kbd "C-c C-p") 'wdired-change-to-wdired-mode)
     (setq wgrep-auto-save-buffer t)))
 
-(use-package ag
-  :ensure t
-  :bind ("C-c f" . ag-project))
-
 (use-package projectile
   :ensure t
   :init
@@ -305,9 +307,30 @@
   (progn
   (setq projectile-completion-system 'helm)
   (setq projectile-switch-project-action 'helm-projectile)
+  (add-to-list 'projectile-test-files-suffices ".spec" t)
+  (add-to-list 'projectile-other-file-alist '("js" . ("spec.js" "test.js")) t)
+  (add-to-list 'projectile-other-file-alist '("spec.js" . ("js")) t)
+  (add-to-list 'projectile-other-file-alist '("test.js" . ("js")) t)
+  (define-key projectile-command-map (kbd "o") 'projectile-find-other-file)
   (use-package helm-projectile
     :ensure t
     :config
     (helm-projectile-on)))
   :bind
   ("C-p" . helm-projectile))
+
+(use-package restclient
+  :ensure t
+  :config
+  (progn
+    (defun alkaline/restclient ()
+      (interactive)
+    (let ((buffer (generate-new-buffer "restclient")))
+      (set-buffer buffer)
+      (restclient-mode)
+      (switch-to-buffer buffer)))
+    (use-package company-restclient
+      :ensure t
+      :config
+      (add-to-list 'company-backends 'company-restclient)))
+  :bind ("<f5>" . alkaline/restclient))
