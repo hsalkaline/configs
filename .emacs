@@ -42,7 +42,11 @@
 ; auto-save
 (setq auto-save-visited-file-name t)
 
+;parens
 (show-paren-mode t)
+
+;recentf-mode
+(recentf-mode t)
 
 ;restore session
 (desktop-save-mode t)
@@ -50,6 +54,9 @@
 ;; trail whitespace and convert tabs to spaces on save
 (add-hook 'before-save-hook (lambda() (unless (string= (buffer-local-value 'major-mode (current-buffer)) "makefile-bsdmake-mode")
                                         (alkaline/cleanup-buffer-safe))))
+
+(setq indent-tabs-mode nil)
+(global-set-key (kbd "<f6>") 'quoted-insert)
 
 ;; eshell
 (global-set-key (kbd "<f8>") 'eshell)
@@ -232,12 +239,12 @@
 
 (use-package magit
   :ensure t
-  :bind ("C-c m" . magit-status)
-  :config
-  (use-package magit-filenotify
-    :ensure t
-    :init
-    (add-hook 'magit-status-mode-hook 'magit-filenotify-mode)))
+  :bind ("C-c m" . magit-status))
+  ;; :config
+  ;; (use-package magit-filenotify
+  ;;   :ensure t
+  ;;   :init
+  ;;   (add-hook 'magit-status-mode-hook 'magit-filenotify-mode)))
 
 (use-package flyspell
   :ensure t
@@ -334,3 +341,10 @@
       :config
       (add-to-list 'company-backends 'company-restclient)))
   :bind ("<f5>" . alkaline/restclient))
+
+;; (use-package smart-forward
+;;   :ensure t
+;;   :bind(("ESC <up>" . smart-up)
+;;         ("ESC <down>" . smart-down)
+;;         ("ESC <left>" . smart-backward)
+;;         ("ESC <right>" . smart-forward)))
