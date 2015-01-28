@@ -150,7 +150,7 @@
 (use-package multiple-cursors
   :ensure t
   :bind(("M-q" . mc/mark-all-dwim)
-        ("M-e" . mc/mark-next-like-this)
+        ("M-e" . mc/mark-more-like-this-extended)
         ("M-d" . mc/edit-lines)))
 
 (use-package popwin
