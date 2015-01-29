@@ -128,7 +128,7 @@
   :ensure t
   :init
   (progn
-    (dot-mode-on)
+    (add-hook 'find-file-hooks 'dot-mode-on)
     (define-key dot-mode-map (kbd "C-'") 'dot-mode-execute)))
 
 ;;jumping
