@@ -70,9 +70,6 @@
 ; replace in region
 (delete-selection-mode t)
 
-;;ffap
-(global-set-key "\C-x\C-f" 'find-file-at-point)
-
 ;;paste C-w
 (global-set-key "\C-w" 'yank)
 
@@ -224,7 +221,8 @@
     (setq helm-locate-fuzzy-match t
           helm-M-x-fuzzy-match t
           helm-buffers-fuzzy-matching t
-          helm-recentf-fuzzy-match t)
+          helm-recentf-fuzzy-match t
+          helm-buffer-max-length 40)
     (use-package helm-ag
       :ensure t)
     (use-package helm-css-scss
