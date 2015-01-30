@@ -232,6 +232,7 @@
   :bind (("M-x" . helm-M-x)
          ("M-a" . helm-buffers-list)
          ("C-x C-b" . helm-buffers-list)
+         ("C-x C-f" . helm-find-files)
          ("C-x b" . helm-mini)
          ("M-y" . helm-show-kill-ring)
          ("C-x C-r" . helm-recentf)
