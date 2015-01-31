@@ -43,7 +43,7 @@
 
 ; line numbers
 (setq linum-format "%s ")
-(global-linum-mode t)
+(add-hook 'prog-mode-hook 'linum-mode)
 
 ; auto-save
 (setq auto-save-visited-file-name t)
@@ -55,7 +55,7 @@
 (recentf-mode t)
 
 ;restore session
-(desktop-save-mode t)
+;; (desktop-save-mode t)
 
 ;; trail whitespace and convert tabs to spaces on save
 (add-hook 'before-save-hook (lambda() (unless (string= (buffer-local-value 'major-mode (current-buffer)) "makefile-bsdmake-mode")
@@ -132,7 +132,7 @@
   :init
   (progn
     (add-hook 'find-file-hooks 'dot-mode-on)
-    (define-key dot-mode-map (kbd "C-'") 'dot-mode-execute)))
+    (define-key dot-mode-map (kbd "M-'") 'dot-mode-execute)))
 
 ;;jumping
 (require 'cl)
@@ -276,7 +276,8 @@
 (use-package alkaline
   :load-path "alkaline")
 
-(use-package floobits)
+(use-package floobits
+  :ensure t)
 (use-package flx-ido
   :ensure t)
 (use-package flycheck
@@ -364,3 +365,6 @@
   :ensure t
   :init
   (dired-details-install))
+
+;;pdf
+(setq doc-view-continuous t)
