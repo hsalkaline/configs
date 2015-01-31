@@ -34,10 +34,16 @@
 ;;ls --dired
 (setq dired-use-ls-dired nil)
 
+;; Auto refresh buffers
+(global-auto-revert-mode 1)
+
+;; Also auto refresh dired, but be quiet about it
+(setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-verbose nil)
+
 ; line numbers
 (setq linum-format "%s ")
 (global-linum-mode t)
-;; (column-number-mode t)
 
 ; auto-save
 (setq auto-save-visited-file-name t)
@@ -162,6 +168,7 @@
   :init (popwin-mode t))
 
 (electric-pair-mode t)
+(electric-layout-mode t)
 
 (use-package company
   :ensure t
@@ -347,3 +354,13 @@
 ;;         ("ESC <down>" . smart-down)
 ;;         ("ESC <left>" . smart-backward)
 ;;         ("ESC <right>" . smart-forward)))
+
+(use-package markdown-mode
+  :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
+
+(use-package dired-details
+  :ensure t
+  :init
+  (dired-details-install))
