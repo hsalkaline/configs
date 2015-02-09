@@ -81,7 +81,7 @@
 (global-set-key "\C-w" 'yank)
 
 ;; ido
-(ido-mode t)
+;; (ido-mode t)
 
 ;; \C-c\C-w copy regexp
 ;; \C-c\C-q quit
@@ -193,6 +193,8 @@
   :ensure t
   :init
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.bemhtml\\'" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.xjst\\'" . js2-mode))
   :config
   (progn
     (define-key js2-mode-map (kbd "TAB") (lambda()
@@ -334,6 +336,7 @@
   (progn
   (setq projectile-completion-system 'helm)
   (setq projectile-switch-project-action 'helm-projectile)
+  (setq projectile-enable-caching t)
   (add-to-list 'projectile-test-files-suffices ".spec" t)
   (add-to-list 'projectile-other-file-alist '("js" . ("spec.js" "test.js")) t)
   (add-to-list 'projectile-other-file-alist '("spec.js" . ("js")) t)
