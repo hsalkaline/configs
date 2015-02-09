@@ -33,6 +33,7 @@
 
 ;;ls --dired
 (setq dired-use-ls-dired nil)
+(require 'dired-x)
 
 ;; Auto refresh buffers
 (global-auto-revert-mode 1)
@@ -194,6 +195,13 @@
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
   :config
   (progn
+    (define-key js2-mode-map (kbd "TAB") (lambda()
+                                           (interactive)
+                                           (let ((yas/fallback-behavior 'return-nil))
+                                             (unless (yas/expand)
+                                               (indent-for-tab-command)
+                                               (if (looking-back "^\s*")
+                                                   (back-to-indentation))))))
     (use-package tern
       :ensure t
       :init
@@ -313,6 +321,11 @@
     (define-key dired-mode-map (kbd "C-c C-p") 'wdired-change-to-wdired-mode)
     (setq wgrep-auto-save-buffer t)))
 
+(use-package perspective
+  :ensure t
+  :init
+  (persp-mode))
+
 (use-package projectile
   :ensure t
   :init
@@ -332,6 +345,9 @@
     (helm-projectile-on)))
   :bind
   ("C-p" . helm-projectile))
+
+(use-package persp-projectile
+  :ensure t)
 
 (use-package restclient
   :ensure t
@@ -368,3 +384,20 @@
 
 ;;pdf
 (setq doc-view-continuous t)
+
+(use-package yasnippet
+  :ensure t
+  :init
+  (setq yas-snippet-dirs
+      '("~/.emacs.d/github/"))
+  (yas-global-mode 1))
+
+;;;octave
+(setq auto-mode-alist
+            (cons '("\\.m$" . octave-mode) auto-mode-alist))
+
+(use-package howdoi
+  :ensure t
+  :bind("C-c C-o i" . howdoi-query-insert-code-snippet-at-point))
+
+;;;
