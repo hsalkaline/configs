@@ -169,7 +169,7 @@
   :init (popwin-mode t))
 
 (electric-pair-mode t)
-(electric-layout-mode t)
+;; (electric-layout-mode t)
 
 (use-package company
   :ensure t
@@ -197,6 +197,7 @@
   (add-to-list 'auto-mode-alist '("\\.xjst\\'" . js2-mode))
   :config
   (progn
+    (define-key js2-mode-map (kbd "M-j") nil)
     (define-key js2-mode-map (kbd "TAB") (lambda()
                                            (interactive)
                                            (let ((yas/fallback-behavior 'return-nil))
@@ -241,7 +242,9 @@
           helm-recentf-fuzzy-match t
           helm-buffer-max-length 40)
     (use-package helm-ag
-      :ensure t)
+      :ensure t
+      :init
+      (setq helm-ag-always-set-extra-option t))
     (use-package helm-css-scss
       :ensure t))
   :bind (("M-x" . helm-M-x)
