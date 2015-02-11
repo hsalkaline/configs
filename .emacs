@@ -103,11 +103,14 @@
   (terminal-init-screen))
 
 ;;colors
-(use-package tangotango-theme
+;; (use-package tangotango-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'tangotango t))
+(use-package monokai-theme
   :ensure t
   :config
-  (load-theme 'tangotango t))
-
+  (load-theme 'monokai t))
 ;; ;; key-chord
 ;; (use-package key-chord
 ;;   :config
@@ -169,7 +172,7 @@
   :init (popwin-mode t))
 
 (electric-pair-mode t)
-;; (electric-layout-mode t)
+;;;(electric-layout-mode t)
 
 (use-package company
   :ensure t
