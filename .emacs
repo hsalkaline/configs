@@ -407,6 +407,6 @@
 
 (use-package howdoi
   :ensure t
-  :bind("C-c C-o i" . howdoi-query-insert-code-snippet-at-point))
+  :bind("<f7>" . howdoi-query-insert-code-snippet-at-point))
 
 ;;;
