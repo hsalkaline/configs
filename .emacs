@@ -349,6 +349,7 @@
   (add-to-list 'projectile-other-file-alist '("spec.js" . ("js")) t)
   (add-to-list 'projectile-other-file-alist '("test.js" . ("js")) t)
   (define-key projectile-command-map (kbd "o") 'projectile-find-other-file)
+  (setq compilation-scroll-output t)
   (use-package helm-projectile
     :ensure t
     :config
