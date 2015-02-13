@@ -338,7 +338,7 @@
 (use-package projectile
   :ensure t
   :init
-  (add-hook 'prog-mode-hook 'projectile-mode)
+  (projectile-global-mode t)
   :config
   (progn
   (setq projectile-completion-system 'helm)
