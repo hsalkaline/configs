@@ -244,6 +244,7 @@
           helm-buffers-fuzzy-matching t
           helm-recentf-fuzzy-match t
           helm-buffer-max-length 40)
+    (helm-autoresize-mode t)
     (use-package helm-ag
       :ensure t
       :init
