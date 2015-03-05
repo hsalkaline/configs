@@ -1,4 +1,4 @@
-;; melpa packages
+; melpa packages
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
@@ -59,9 +59,8 @@
 ;; (desktop-save-mode t)
 
 ;; trail whitespace and convert tabs to spaces on save
-(add-hook 'before-save-hook (lambda() (unless (string= (buffer-local-value 'major-mode (current-buffer)) "makefile-bsdmake-mode")
+(add-hook 'before-save-hook (lambda() (unless (string-match "makefile" (symbol-name (buffer-local-value 'major-mode (current-buffer))))
                                         (alkaline/cleanup-buffer-safe))))
-
 (setq indent-tabs-mode nil)
 (global-set-key (kbd "<f6>") 'quoted-insert)
 
@@ -342,7 +341,7 @@
   :config
   (progn
   (setq projectile-completion-system 'helm)
-  (setq projectile-switch-project-action 'helm-projectile)
+  (setq projectile-switch-project-action 'projectile-dired)
   (setq projectile-enable-caching t)
   (add-to-list 'projectile-test-files-suffices ".spec" t)
   (add-to-list 'projectile-other-file-alist '("js" . ("spec.js" "test.js")) t)
@@ -350,6 +349,12 @@
   (add-to-list 'projectile-other-file-alist '("test.js" . ("js")) t)
   (define-key projectile-command-map (kbd "o") 'projectile-find-other-file)
   (setq compilation-scroll-output t)
+  (require 'ansi-color)
+  (defun colorize-compilation-buffer ()
+    (toggle-read-only)
+    (ansi-color-apply-on-region (point-min) (point-max))
+    (toggle-read-only))
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
   (use-package helm-projectile
     :ensure t
     :config
