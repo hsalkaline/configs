@@ -416,4 +416,9 @@
   :ensure t
   :bind("<f7>" . howdoi-query-insert-code-snippet-at-point))
 
+(use-package json-mode
+  :ensure t)
+(use-package json-reformat
+  :ensure t)
+
 ;;;
