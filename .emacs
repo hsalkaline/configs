@@ -393,10 +393,10 @@
   :init
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
-(use-package dired-details
-  :ensure t
-  :init
-  (dired-details-install))
+;; (use-package dired-details
+;;   :ensure t
+;;   :init
+;;   (dired-details-install))
 
 ;;pdf
 (setq doc-view-continuous t)
@@ -420,5 +420,9 @@
   :ensure t)
 (use-package json-reformat
   :ensure t)
+
+(use-package git-messenger
+  :ensure t
+  :bind("C-x v p" . git-messenger:popup-message))
 
 ;;;
