@@ -409,4 +409,8 @@
   :ensure t
   :bind("<f7>" . howdoi-query-insert-code-snippet-at-point))
 
+(use-package edit-server
+  :ensure t
+  :init
+  (edit-server-start))
 ;;;
