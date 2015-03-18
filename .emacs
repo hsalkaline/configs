@@ -31,6 +31,9 @@
 ;; yes/no -> y/n
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;;no lockfiles
+(setq create-lockfiles nil)
+
 ;;ls --dired
 (setq dired-use-ls-dired nil)
 (require 'dired-x)
@@ -184,7 +187,17 @@
   (progn
     (global-undo-tree-mode)
     (setq undo-tree-history-directory-alist `((".*" . "~/.emacs.d/undo")))
-    (setq undo-tree-auto-save-history t)))
+    (setq undo-tree-auto-save-history t)
+    (defadvice undo-tree-undo (around keep-region activate)
+      (if (use-region-p)
+          (let ((m (set-marker (make-marker) (mark)))
+                (p (set-marker (make-marker) (point))))
+            ad-do-it
+            (goto-char p)
+            (set-mark m)
+            (set-marker p nil)
+            (set-marker m nil))
+        ad-do-it))))
 
 ;; org-mode
 ;; (global-set-key "\C-cl" 'org-store-link)
