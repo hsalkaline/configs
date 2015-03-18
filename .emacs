@@ -438,4 +438,8 @@
   :ensure t
   :bind("C-x v p" . git-messenger:popup-message))
 
+(use-package edit-server
+  :ensure t
+  :init
+  (edit-server-start))
 ;;;
