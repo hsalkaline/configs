@@ -136,9 +136,9 @@
 (use-package dot-mode
   :ensure t
   :init
-  (progn
-    (add-hook 'find-file-hooks 'dot-mode-on)
-    (define-key dot-mode-map (kbd "M-'") 'dot-mode-execute)))
+  (add-hook 'find-file-hooks 'dot-mode-on)
+  :config
+  (define-key dot-mode-map (kbd "M-'") 'dot-mode-execute))
 
 ;;jumping
 (require 'cl)
@@ -171,7 +171,7 @@
 
 (use-package popwin
   :ensure t
-  :init (popwin-mode t))
+  :config (popwin-mode t))
 
 (electric-pair-mode t)
 ;;;(electric-layout-mode t)
