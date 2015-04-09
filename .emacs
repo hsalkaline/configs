@@ -1,6 +1,6 @@
 ; melpa packages
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
 (when (not (require 'use-package nil 'noerror))
@@ -442,4 +442,9 @@
   :ensure t
   :init
   (edit-server-start))
+
+(use-package osx-pseudo-daemon
+  :ensure t
+  :init
+  (osx-pseudo-daemon-mode))
 ;;;
