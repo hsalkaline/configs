@@ -125,8 +125,7 @@
 ;; evil-mode
 (use-package evil
   :ensure t
-  :bind(("C-d" . evil-delete-whole-line)
-        ("C-v" . set-mark-command)
+  :bind(("C-v" . set-mark-command)
         ("C-l" . evil-forward-char)
         ("C-h" . evil-backward-char)
         ("C-k" . evil-previous-line)
@@ -237,13 +236,14 @@
       :init
       (add-hook 'js2-mode-hook
                 #'(lambda ()
-                    (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc))))
-    (use-package js2-refactor
+                    (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc))))))
+
+(use-package js2-refactor
       :ensure t
-      :init
-      (require 'js2-refactor)
       :config
-      (js2r-add-keybindings-with-prefix "C-c C-m"))))
+      (progn
+        (require 'js2-refactor)
+        (js2r-add-keybindings-with-prefix "C-c C-m")))
 
 (use-package helm
   :ensure t
@@ -300,6 +300,7 @@
   (progn
     (global-ace-isearch-mode t)
     (setq ace-isearch-input-length 2)
+    (setq ace-isearch-input-idle-jump-delay 1)
     (setq ace-isearch-submode 'ace-jump-char-mode)))
 
 (use-package alkaline

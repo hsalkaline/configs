@@ -100,4 +100,26 @@ the current position of point, then move it to the beginning of the line."
 
 (global-set-key "\M-k" 'alkaline/copy-line)
 
+
+(defun alkaline/cut-line-or-region ()
+  "Cut current line, or text selection.
+When `universal-argument' is called first, cut whole buffer (respects `narrow-to-region').
+
+URL `http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html'
+Version 2015-05-06"
+  (interactive)
+  (let (e1 e2)
+    (if current-prefix-arg
+        (progn (setq e1 (point-min))
+               (setq e2 (point-max)))
+      (progn (if (use-region-p)
+                 (progn (setq e1 (region-beginning))
+                        (setq e2 (region-end)))
+               (progn (setq e1 (line-beginning-position))
+                      (setq e2 (line-end-position))))))
+    (progn (kill-region e1 e2)
+           (delete-char 1))))
+
+(global-set-key "\C-d" 'alkaline/cut-line-or-region)
+
 (provide 'alkaline)
