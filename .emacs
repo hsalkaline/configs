@@ -145,17 +145,6 @@
   :ensure t)
 (use-package dash
   :ensure t)
-(use-package better-jump
-  :load-path "github/better-jump"
-  :config
-  (setq bjump-picker-single-letter-list "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM"))
-
-(defun alkaline/visual-select-to-char ()
-  (interactive)
-  (call-interactively 'set-mark-command)
-  (call-interactively 'bjump-char-jump)
-  (forward-char))
-(global-set-key "\C-f" 'alkaline/visual-select-to-char)
 
 ;;selecting
 (use-package expand-region
@@ -294,14 +283,13 @@
   :config
   (powerline-default-theme))
 
-(use-package ace-isearch
+(use-package ace-jump-mode
   :ensure t
-  :config
-  (progn
-    (global-ace-isearch-mode t)
-    (setq ace-isearch-input-length 2)
-    (setq ace-isearch-input-idle-jump-delay 1)
-    (setq ace-isearch-submode 'ace-jump-char-mode)))
+  :bind("C-f" . ace-jump-char-mode))
+
+(use-package helm-swoop
+  :ensure t
+  :bind("C-s" . helm-swoop))
 
 (use-package alkaline
   :load-path "alkaline")
@@ -319,9 +307,6 @@
   :ensure t)
 
 (use-package less-css-mode
-  :ensure t)
-
-(use-package smooth-scrolling
   :ensure t)
 
 (use-package web-beautify
@@ -351,30 +336,29 @@
 (use-package projectile
   :ensure t
   :init
-  (projectile-global-mode t)
-  :config
   (progn
-  (setq projectile-completion-system 'helm)
-  (setq projectile-switch-project-action 'projectile-dired)
-  (setq projectile-enable-caching t)
-  (add-to-list 'projectile-test-files-suffices ".spec" t)
-  (add-to-list 'projectile-other-file-alist '("js" . ("spec.js" "test.js")) t)
-  (add-to-list 'projectile-other-file-alist '("spec.js" . ("js")) t)
-  (add-to-list 'projectile-other-file-alist '("test.js" . ("js")) t)
-  (define-key projectile-command-map (kbd "o") 'projectile-find-other-file)
-  (setq compilation-scroll-output t)
-  (require 'ansi-color)
-  (defun colorize-compilation-buffer ()
-    (toggle-read-only)
-    (ansi-color-apply-on-region (point-min) (point-max))
-    (toggle-read-only))
-  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-  (use-package helm-projectile
-    :ensure t
-    :config
-    (helm-projectile-on)))
+    (projectile-global-mode t)
+    (setq projectile-completion-system 'helm)
+    (setq projectile-switch-project-action 'projectile-dired)
+    (setq projectile-enable-caching t)
+    (add-to-list 'projectile-other-file-alist '("js" . ("spec.js" "test.js")) t)
+    (add-to-list 'projectile-other-file-alist '("spec.js" . ("js")) t)
+    (add-to-list 'projectile-other-file-alist '("test.js" . ("js")) t)
+    (define-key projectile-command-map (kbd "o") 'projectile-find-other-file)
+    (use-package helm-projectile
+      :ensure t
+      :config
+      (helm-projectile-on)))
   :bind
   ("C-p" . helm-projectile))
+
+(setq compilation-scroll-output t)
+(require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region (point-min) (point-max))
+  (toggle-read-only))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
 (use-package persp-projectile
   :ensure t)
@@ -448,4 +432,9 @@
   :ensure t
   :init
   (osx-pseudo-daemon-mode))
+
+;; (use-package aggressive-indent
+;;   :ensure t
+;;   :init
+;;   (global-aggressive-indent-mode 1))
 ;;;
