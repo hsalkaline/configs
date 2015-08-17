@@ -208,18 +208,18 @@
                                                (indent-for-tab-command)
                                                (if (looking-back "^\s*")
                                                    (back-to-indentation))))))
-    (use-package tern
-      :ensure t
-      :init
-      (add-hook 'js2-mode-hook #'(lambda () (tern-mode t)))
-      :config
-      (progn
-        (define-key tern-mode-keymap (kbd "\C-c\C-c") nil)
-        (define-key tern-mode-keymap (kbd "\C-c\C-d") nil)
-        (use-package company-tern
-          :ensure t
-          :config
-          (add-to-list 'company-backends 'company-tern))))
+    ;; (use-package tern
+    ;;   :ensure t
+    ;;   :init
+    ;;   (add-hook 'js2-mode-hook #'(lambda () (tern-mode t)))
+    ;;   :config
+    ;;   (progn
+    ;;     (define-key tern-mode-keymap (kbd "\C-c\C-c") nil)
+    ;;     (define-key tern-mode-keymap (kbd "\C-c\C-d") nil)
+    ;;     (use-package company-tern
+    ;;       :ensure t
+    ;;       :config
+    ;;       (add-to-list 'company-backends 'company-tern))))
     (use-package js-doc
       :ensure t
       :init
@@ -229,10 +229,11 @@
 
 (use-package js2-refactor
       :ensure t
-      :config
+      :init
       (progn
         (require 'js2-refactor)
-        (js2r-add-keybindings-with-prefix "C-c C-m")))
+        (add-hook 'js2-mode-hook #'js2-refactor-mode)
+        (js2r-add-keybindings-with-prefix "C-c C-r")))
 
 (use-package helm
   :ensure t
@@ -287,9 +288,9 @@
   :ensure t
   :bind("C-f" . ace-jump-char-mode))
 
-(use-package helm-swoop
+(use-package swiper-helm
   :ensure t
-  :bind("C-s" . helm-swoop))
+  :bind("C-s" . swiper-helm))
 
 (use-package alkaline
   :load-path "alkaline")
@@ -438,3 +439,5 @@
 ;;   :init
 ;;   (global-aggressive-indent-mode 1))
 ;;;
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
