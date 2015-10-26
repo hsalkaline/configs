@@ -9,7 +9,7 @@
 (defun alkaline/cleanup-buffer-safe ()
   (interactive)
   (untabify (point-min) (point-max))
-  (delete-trailing-whitespace)
+  ;; (delete-trailing-whitespace)
   (set-buffer-file-coding-system 'utf-8))
 
 ; commenting \M-;
@@ -67,29 +67,29 @@ the current position of point, then move it to the beginning of the line."
 
 (global-set-key (kbd "<backtab>") 'alkaline/switch-to-previous-buffer)
 
-;; insert-file-name
-(defun alkaline/insert-file-name (filename &optional args)
-  "Insert name of file FILENAME into buffer after point.
+;; ;; insert-file-name
+;; (defun alkaline/insert-file-name (filename &optional args)
+;;   "Insert name of file FILENAME into buffer after point.
 
-  Prefixed with \\[universal-argument], expand the file name to
-  its fully canocalized path.  See `expand-file-name'.
+;;   Prefixed with \\[universal-argument], expand the file name to
+;;   its fully canocalized path.  See `expand-file-name'.
 
-  Prefixed with \\[negative-argument], use relative path to file
-  name from current directory, `default-directory'.  See
-  `file-relative-name'.
+;;   Prefixed with \\[negative-argument], use relative path to file
+;;   name from current directory, `default-directory'.  See
+;;   `file-relative-name'.
 
-  The default with no prefix is to insert the file name exactly as
-  it appears in the minibuffer prompt."
-  (interactive `(,(ido-read-file-name "File Name: ")
-                 ,current-prefix-arg))
-  (cond ((eq '- args)
-         (insert (expand-file-name filename)))
-        ((not (null args))
-         (insert filename))
-        (t
-         (insert (file-relative-name filename)))))
+;;   The default with no prefix is to insert the file name exactly as
+;;   it appears in the minibuffer prompt."
+;;   (interactive `(,(ido-read-file-name "File Name: ")
+;;                  ,current-prefix-arg))
+;;   (cond ((eq '- args)
+;;          (insert (expand-file-name filename)))
+;;         ((not (null args))
+;;          (insert filename))
+;;         (t
+;;          (insert (file-relative-name filename)))))
 
-(global-set-key "\C-c\C-i" 'alkaline/insert-file-name)
+;; (global-set-key "\C-c\C-i" 'alkaline/insert-file-name)
 
 (defun alkaline/copy-line (arg)
   "Copy lines (as many as prefix argument) in the kill ring"
