@@ -62,8 +62,13 @@
 ;; (desktop-save-mode t)
 
 ;; trail whitespace and convert tabs to spaces on save
-(add-hook 'before-save-hook (lambda() (unless (string-match "makefile" (symbol-name (buffer-local-value 'major-mode (current-buffer))))
+(add-hook 'before-save-hook (lambda() (if (and (eq nil (string-match "makefile" (symbol-name (buffer-local-value 'major-mode (current-buffer)))))
+                                                  (eq nil (string-match "perl-mode" (symbol-name (buffer-local-value 'major-mode (current-buffer)))))
+                                                  (eq nil (string-match "markdown" (symbol-name (buffer-local-value 'major-mode (current-buffer))))))
                                         (alkaline/cleanup-buffer-safe))))
+;; (add-hook 'before-save-hook (lambda() (unless (string-match "makefile" (symbol-name (buffer-local-value 'major-mode (current-buffer))))
+                                        ;; (alkaline/cleanup-buffer-safe))))
+
 (setq indent-tabs-mode nil)
 (global-set-key (kbd "<f6>") 'quoted-insert)
 
@@ -105,15 +110,24 @@
   (terminal-init-screen))
 
 ;;colors
+(use-package flatland-theme
+  :ensure t
+  :config
+  (load-theme 'flatland t))
+;; (use-package monokai-theme
 ;; (use-package tangotango-theme
 ;;   :ensure t
 ;;   :config
 ;;   (load-theme 'tangotango t))
-(use-package monokai-theme
-  :ensure t
-  :config
-  (load-theme 'monokai t))
-;; ;; key-chord
+;; (use-package monokai-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'monokai t))
+;; (use-package leuven-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'leuven t))
+;; ;; ;; key-chord
 ;; (use-package key-chord
 ;;   :config
 ;;   (progn
@@ -187,16 +201,12 @@
             (set-marker m nil))
         ad-do-it))))
 
-;; org-mode
-;; (global-set-key "\C-cl" 'org-store-link)
-;; (global-set-key "\C-ca" 'org-agenda)
-;; (global-set-key "\C-cb" 'org-iswitchb)
-
 (use-package js2-mode
   :ensure t
   :init
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.bemhtml\\'" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.bemhtml.js\\'" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.xjst\\'" . js2-mode))
   :config
   (progn
@@ -208,18 +218,18 @@
                                                (indent-for-tab-command)
                                                (if (looking-back "^\s*")
                                                    (back-to-indentation))))))
-    ;; (use-package tern
-    ;;   :ensure t
-    ;;   :init
-    ;;   (add-hook 'js2-mode-hook #'(lambda () (tern-mode t)))
-    ;;   :config
-    ;;   (progn
-    ;;     (define-key tern-mode-keymap (kbd "\C-c\C-c") nil)
-    ;;     (define-key tern-mode-keymap (kbd "\C-c\C-d") nil)
-    ;;     (use-package company-tern
-    ;;       :ensure t
-    ;;       :config
-    ;;       (add-to-list 'company-backends 'company-tern))))
+    (use-package tern
+      :ensure t
+      :init
+      (add-hook 'js2-mode-hook #'(lambda () (tern-mode t)))
+      :config
+      (progn
+        (define-key tern-mode-keymap (kbd "\C-c\C-c") nil)
+        (define-key tern-mode-keymap (kbd "\C-c\C-d") nil)
+        (use-package company-tern
+          :ensure t
+          :config
+          (add-to-list 'company-backends 'company-tern))))
     (use-package js-doc
       :ensure t
       :init
@@ -250,8 +260,15 @@
     (use-package helm-ag
       :ensure t
       :init
-      (setq helm-ag-always-set-extra-option t))
+      (progn
+        (setq helm-ag-always-set-extra-option t)
+        (setq helm-ag-command-option "--ignore=test.bundles --ignore=desktop.bundles --ignore=node_modules")
+        (setq helm-ag-fuzzy-match t)))
+
     (use-package helm-css-scss
+      :ensure t)
+
+    (use-package helm-swoop
       :ensure t))
   :bind (("M-x" . helm-M-x)
          ("M-a" . helm-buffers-list)
@@ -260,7 +277,8 @@
          ("C-x b" . helm-mini)
          ("M-y" . helm-show-kill-ring)
          ("C-x C-r" . helm-recentf)
-         ("M-m" . helm-mark-ring)))
+         ("M-m" . helm-mark-ring)
+         ("C-s" . helm-swoop)))
 
 (use-package magit
   :ensure t
@@ -271,10 +289,10 @@
   ;;   :init
   ;;   (add-hook 'magit-status-mode-hook 'magit-filenotify-mode)))
 
-(use-package flyspell
-  :ensure t
-  :init
-  (add-hook 'prog-mode-hook 'flyspell-prog-mode))
+;; (use-package flyspell
+;;   :ensure t
+;;   :init
+;;   (add-hook 'prog-mode-hook 'flyspell-prog-mode))
 
 (use-package smooth-scrolling
   :ensure t)
@@ -288,9 +306,9 @@
   :ensure t
   :bind("C-f" . ace-jump-char-mode))
 
-(use-package swiper-helm
-  :ensure t
-  :bind("C-s" . swiper-helm))
+;; (use-package swiper-helm
+;;   :ensure t
+;;   :bind("C-s" . swiper-helm))
 
 (use-package alkaline
   :load-path "alkaline")
@@ -328,11 +346,6 @@
     (require 'dired)
     (define-key dired-mode-map (kbd "C-c C-p") 'wdired-change-to-wdired-mode)
     (setq wgrep-auto-save-buffer t)))
-
-(use-package perspective
-  :ensure t
-  :init
-  (persp-mode))
 
 (use-package projectile
   :ensure t
@@ -380,13 +393,6 @@
       (add-to-list 'company-backends 'company-restclient)))
   :bind ("<f5>" . alkaline/restclient))
 
-;; (use-package smart-forward
-;;   :ensure t
-;;   :bind(("ESC <up>" . smart-up)
-;;         ("ESC <down>" . smart-down)
-;;         ("ESC <left>" . smart-backward)
-;;         ("ESC <right>" . smart-forward)))
-
 (use-package markdown-mode
   :ensure t
   :init
@@ -400,24 +406,17 @@
 ;;pdf
 (setq doc-view-continuous t)
 
-(use-package yasnippet
-  :ensure t
-  :init
-  (setq yas-snippet-dirs
-      '("~/.emacs.d/github/"))
-  (yas-global-mode 1))
-
 ;;;octave
 (setq auto-mode-alist
-            (cons '("\\.m$" . octave-mode) auto-mode-alist))
-
-(use-package howdoi
-  :ensure t
-  :bind("<f7>" . howdoi-query-insert-code-snippet-at-point))
+      (cons '("\\.m$" . octave-mode) auto-mode-alist))
 
 (use-package json-mode
   :ensure t)
 (use-package json-reformat
+  :ensure t)
+
+
+(use-package tt-mode
   :ensure t)
 
 (use-package git-messenger
@@ -429,18 +428,14 @@
   :init
   (edit-server-start))
 
+(use-package ess
+  :ensure t)
+
 (use-package osx-pseudo-daemon
   :ensure t
   :init
   (osx-pseudo-daemon-mode))
 
-(use-package ggtags
-  :ensure t)
-;; (use-package aggressive-indent
-;;   :ensure t
-;;   :init
-;;   (global-aggressive-indent-mode 1))
-;;;
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (custom-set-variables
@@ -448,6 +443,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(projectile-project-root-files
+   (quote
+    ("rebar.config" "project.clj" "SConstruct" "pom.xml" "build.sbt" "build.gradle" "Gemfile" "requirements.txt" "setup.py" "tox.ini" "package.json" "gulpfile.js" "Gruntfile.js" "bower.json" "composer.json" "Cargo.toml" "mix.exs" "zlo.json")))
  '(projectile-tags-command
    "/home/alkaline/bin/ctags --exclude=desktop.bundles/direct -Re -f \"%s\" %s"))
 (custom-set-faces

@@ -9,7 +9,7 @@
 (defun alkaline/cleanup-buffer-safe ()
   (interactive)
   (untabify (point-min) (point-max))
-  ;; (delete-trailing-whitespace)
+  (delete-trailing-whitespace)
   (set-buffer-file-coding-system 'utf-8))
 
 ; commenting \M-;
